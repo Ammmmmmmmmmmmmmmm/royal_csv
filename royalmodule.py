@@ -16,7 +16,7 @@ def newest():
 	for file in file_list:
 		if (time.ctime(os.path.getmtime(os.path.join("inputs",file)))) > time.ctime(os.path.getmtime(latest)):
 			latest = os.path.join("inputs",file)
-	print(latest)
+	#print(latest)
 	return latest
 
 def unpackcsv(file):
@@ -28,9 +28,12 @@ def unpackcsv(file):
 
 def packcsv(file,list_csv):
 	"""Makes a csv out of the file,list"""
-	#file_location = os.path.join("~","royal_csv","csv_outputs")
-	#os.chdir(file_location)
-	with open(file, "w") as file:
+	file_loc = os.path.join("home","antwanmeave","royal_csv","outputs")
+	print(file_loc)
+	print(os.getcwd())
+	os.chdir(file_loc)
+	print(os.getcwd())
+	with open(file_loc, "w") as file:
 		for record in list_csv:
 			fin_record = ""
 			field = ""
