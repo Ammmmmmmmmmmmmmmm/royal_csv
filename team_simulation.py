@@ -1,3 +1,5 @@
+#doesnt work in iteration 2
+
 import os
 import csv
 

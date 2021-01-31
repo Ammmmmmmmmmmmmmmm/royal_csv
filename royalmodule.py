@@ -28,10 +28,8 @@ def unpackcsv(file):
 
 
 def packcsv(file,list_csv):
-	"""Makes a csv out of the file,list"""
-	file_loc = os.path.join(".","royal_csv","outputs",file)
-	print(file_loc)
-	with open(file_loc, "w+") as file:
+	string = "outputs/"+file
+	with open(string, "w+") as file:
 		for record in list_csv:
 			fin_record = ""
 			field = ""

@@ -14,7 +14,7 @@ fix_pr = {"master sergeant":18, "Major":31,"1st Lietenant":24,"2nd lt":22,"Capta
 fix_names = {"brutalglory #5248":"brutalglory#5248","Hosky #8249":"Hosky#8249","ImSoloDoloMan":"ImSoloDoloMan#4177","It's ok":"MRT44#8992","I am already an Extra Thicc member baby":"Doppelsolna#6261", "Purple":"Purple#8192", "A_Singh":"A_Singh#1951", "young abraham ":"abe#2475", "Genesis":"Genesis#0955", "coxinga":"coxinga#3538","Already a member":"Keaton#3947","5242":"Shaun#5242","EstiPesti 6900":"EstiPesti#6900","yES":"Hiver#6844","im dan":"boisenberry#0810", "Kyo_3z":"Kyo_3z#9606", "ggbyers #7732":"ggbyers#7732", "FrankTh3Tank95":"FrankTh3Tank95#8053","Knarloc(#8062)":"Knarloc#8062", "lcomontenegro":"lcomontenegro#2631","JaiLeD":"JaiLeD#9326"}
 fix_pr_lies = {"WickedCossack#1242":33}
 fix_de_lies = {"WickedCossack#1242":2300}
-fix_draft_response = {"Kyo_3z#9606":"My Dutch hero's name is \"NOOB BASHER THE SECOND\" so draft me pls"}
+fix_draft_response = {"Kyo_3z#9606":"My Dutch hero's name is \"NOOB BASHER THE SECOND\" so draft me pls", " challenger_marco#8536":"Hi,I myself have a wide civ pool and play any style you want ,if you grab me i'd be giving the mascot as i have challenger in my name ,i don't give up games easily & will try my best to win in any case whether it's rigged or going against the odds doesn't matter ,the challenge will still be there!"}
 team_captians = []
 
 '''create clean list with proper inputs'''
@@ -63,6 +63,9 @@ for player_list in raw_list:
 				de = int("0"+str(de).strip("[]'Rr()+/ -"))
 			else:
 				de = de[0]
+			for key, value in fix_de.items():
+				if key == raw_de:
+					de = value
 	#if no number given see if input matches dictionary fix and switch otherwise output null
 	else:
 		de = 0000
@@ -74,7 +77,9 @@ for player_list in raw_list:
 	if pr_re_list != []:
 		re_ce = (heapq.nlargest(1, pr_re_list, key=None))
 		re_ce = int(str(re_ce).strip("[]'Rr()+/ -"))
-
+		for key, value in fix_pr.items():
+			if key == raw_re:
+				re_ce = value
 	#if no number given see if input matches dictionary fix and switch otherwise output null
 	else:
 		re_ce = 00
@@ -136,13 +141,68 @@ for num,record in enumerate(good_raw):
 
 #sort by re rank by taking the honest list to replace 
 sort_by_re_clean = sorted(honest_list, key = lambda x: x[2])
+sort_by_re_de_insert = []
+#create the two lists
+for record in range(0,len(sort_by_re_clean)):
+	if int(sort_by_re_clean[record][2]) == 0:
+		sort_by_re_de_insert.append(sort_by_re_clean[record])
+for record in sort_by_re_de_insert:
+	for records in sort_by_re_clean: 
+		if record == records:
+			del sort_by_re_clean[sort_by_re_clean.index(records)]
+sort_by_re_de_insert = sorted(sort_by_re_de_insert, key = lambda x: x[3])
+#insert de onlys into re list
+for record in range(0,len(sort_by_re_de_insert)):
+	for recordx in range(0,len(sort_by_re_clean)):
+		if sort_by_re_clean[recordx][3] >= sort_by_re_de_insert[record][3] and sort_by_re_clean[recordx][3] != 0:
+			sort_by_re_clean.insert(recordx,sort_by_re_de_insert[record])
+			break
+
+		if record+1 == len(sort_by_re_de_insert) and recordx+1 == len(sort_by_re_clean):
+			#will fix later?
+			print("ran")
+			for x in sort_by_re_se_insert:
+				if x not in sort_by_re_clean:
+					sort_by_re_clean.append(x)
+
+
+#create raw list
 for record in sort_by_re_clean:
 	for raw_record in good_raw:
 		if record[1] == raw_record[3]:
 			sort_by_re_raw.append(raw_record+[record[5]])
 
+
 #sort by de rank by taking the honest list to replace 			
 sort_by_de_clean = sorted(honest_list, key = lambda x: x[3])
+sort_by_de_re_insert = []
+#split lists
+for record in range(0,len(sort_by_de_clean)):
+	if int(sort_by_de_clean[record][3]) == 0:
+		sort_by_de_re_insert.append(sort_by_de_clean[record])
+for record in sort_by_de_re_insert:
+	for records in sort_by_de_clean: 
+		if record == records:
+			del sort_by_de_clean[sort_by_de_clean.index(records)]
+sort_by_de_re_insert = sorted(sort_by_de_re_insert, key = lambda x: x[2])
+
+#insert re onlys into de list
+for record in range(0,len(sort_by_de_re_insert)):
+	for recordx in range(0,len(sort_by_de_clean)):
+		#print("{} >= {}".format(sort_by_de_clean[recordx][2],sort_by_de_re_insert[record][2]))
+		if sort_by_de_clean[recordx][2] >= sort_by_de_re_insert[record][2] and sort_by_de_clean[recordx][2] != 0:
+			#print("true")
+			sort_by_de_clean.insert(recordx,sort_by_de_re_insert[record])
+			break
+
+		if record+1 == len(sort_by_de_re_insert) and recordx+1 == len(sort_by_de_clean):
+			#print("ran")
+			for x in sort_by_de_re_insert:
+				if x not in sort_by_de_clean:
+					sort_by_de_clean.append(x)
+
+
+
 for records in sort_by_de_clean:
 	for raw_records in good_raw:
 		if records[1] == raw_records[3]:
@@ -151,24 +211,29 @@ for records in sort_by_de_clean:
 #print(sort_by_re_raw)
 #print(sort_by_de_raw)
 
+#smoosh lists
+
+
 '''EXPORT THEM ALL'''
 for record in range(0,len(sort_by_de_raw)):
 	if sort_by_de_raw[record][3] in team_captians:
 		del sort_by_de_raw[record]
 	raw_date,raw_akn1,raw_steam,raw_discord,raw_timezone,raw_akn2,raw_re,raw_de,raw_akn3,raw_civ,raw_statement,raw_RoyaL = sort_by_de_raw[record]
-	sort_by_de_raw[record] = [raw_discord,raw_re,raw_de]
+	sort_by_de_raw[record] = [raw_discord.replace(',', ' '),raw_re.replace(',', ' '),raw_de.replace(',', ' '),raw_steam.replace(',', ' ')]
 
 for record in range(0,len(sort_by_re_raw)):
 	if sort_by_re_raw[record][3] in team_captians:
 		del sort_by_re_raw[record] 
 	raw_date,raw_akn1,raw_steam,raw_discord,raw_timezone,raw_akn2,raw_re,raw_de,raw_akn3,raw_civ,raw_statement,raw_RoyaL = sort_by_re_raw[record]
-	sort_by_re_raw[record] = [raw_discord,raw_re,raw_de]
+	sort_by_re_raw[record] = [raw_discord.replace(',', ' '),raw_re.replace(',', ' '),raw_de.replace(',', ' '),raw_steam.replace(',', ' ')]
 
 sort_by_re_raw.reverse()
 sort_by_de_raw.reverse()
 
 ln.packcsv("de_list.csv",(sort_by_de_raw))
 ln.packcsv("re_list.csv",(sort_by_re_raw))
+
+
 
 #strange noises outside my door?
 
