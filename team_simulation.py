@@ -5,24 +5,30 @@ import csv
 
 
 players = []
-teams={}
+teams = {}
 
 #======================================================================
 
 top_team_captians = 18
 just_pr = False
-
+by_de = False
 
 #========================================================================
 
+if by_de:
+	file_loc = "outputs/team_sheet_de"
+	file_used = "outputs/de_list_cleaned.csv"
+else:
+	file_loc = "outputs/team_sheet_re"
+	file_used = "outputs/re_list_cleaned.csv"
 
-
-with open("final.csv", "r") as f:
+with open(file_used, "r") as f:
 	csv_f = csv.reader(f)
 	for row in csv_f:
-		f1,f2,f3,f4,f5,f6 = row
+		f1,f2,f3 = row
 		players.append([f1,f2,f3])
 
+players.reverse()
 #print(players)
 
 for player in range(0,top_team_captians):
@@ -40,12 +46,12 @@ for a in range(2):
 		x = x-1
 
 if just_pr:
-	with open("team_sheet", "w") as file:
+	with open(file_loc, "w") as file:
 		for key, value in teams.items():
 			line = str(value)
 			file.write(line)
 else:
-	with open("team_sheet", "w") as file:
+	with open(file_loc, "w") as file:
 		for key, value in teams.items():
 			line = str(value)+"\n"
 

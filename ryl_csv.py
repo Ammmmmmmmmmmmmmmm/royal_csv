@@ -215,16 +215,19 @@ for records in sort_by_de_clean:
 
 
 '''EXPORT THEM ALL'''
+#export for tad,vivid,don to look at
 for record in range(0,len(sort_by_de_raw)):
 	if sort_by_de_raw[record][3] in team_captians:
 		del sort_by_de_raw[record]
 	raw_date,raw_akn1,raw_steam,raw_discord,raw_timezone,raw_akn2,raw_re,raw_de,raw_akn3,raw_civ,raw_statement,raw_RoyaL = sort_by_de_raw[record]
+	raw_steam = "=HYPERLINK(\""+raw_steam +"\")"
 	sort_by_de_raw[record] = [raw_discord.replace(',', ' '),raw_re.replace(',', ' '),raw_de.replace(',', ' '),raw_steam.replace(',', ' ')]
 
 for record in range(0,len(sort_by_re_raw)):
 	if sort_by_re_raw[record][3] in team_captians:
 		del sort_by_re_raw[record] 
 	raw_date,raw_akn1,raw_steam,raw_discord,raw_timezone,raw_akn2,raw_re,raw_de,raw_akn3,raw_civ,raw_statement,raw_RoyaL = sort_by_re_raw[record]
+	raw_steam = "=HYPERLINK(\""+raw_steam +"\")"
 	sort_by_re_raw[record] = [raw_discord.replace(',', ' '),raw_re.replace(',', ' '),raw_de.replace(',', ' '),raw_steam.replace(',', ' ')]
 
 sort_by_re_raw.reverse()
@@ -233,8 +236,21 @@ sort_by_de_raw.reverse()
 ln.packcsv("de_list.csv",(sort_by_de_raw))
 ln.packcsv("re_list.csv",(sort_by_re_raw))
 
+#export for team simulation
+
+re_output = []
+
+for record in sort_by_re_clean:
+	rawname,name,pr,elo,statement,liece,liede = record
+	re_output.append([name,pr,elo])
+print(re_output)
+ln.packcsv("re_list_cleaned.csv",(re_output))	
 
 
-#strange noises outside my door?
+de_output =[]
 
+for record in sort_by_de_clean:
+	rawname,name,pr,elo,statement,liece,liede = record
+	de_output.append([name,pr,elo])
 
+ln.packcsv("de_list_cleaned.csv",(de_output))
