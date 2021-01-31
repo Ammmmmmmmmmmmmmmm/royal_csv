@@ -26,14 +26,12 @@ def unpackcsv(file):
 		csv_list = list(csv_file)
 		return csv_list
 
+
 def packcsv(file,list_csv):
 	"""Makes a csv out of the file,list"""
-	file_loc = os.path.join("home","antwanmeave","royal_csv","outputs")
+	file_loc = os.path.join(".","royal_csv","outputs",file)
 	print(file_loc)
-	print(os.getcwd())
-	os.chdir(file_loc)
-	print(os.getcwd())
-	with open(file_loc, "w") as file:
+	with open(file_loc, "w+") as file:
 		for record in list_csv:
 			fin_record = ""
 			field = ""
