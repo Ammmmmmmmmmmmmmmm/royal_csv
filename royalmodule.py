@@ -28,8 +28,9 @@ def unpackcsv(file):
 
 def packcsv(file,list_csv):
 	"""Makes a csv out of the file,list"""
-	file_location = os.path.join("~","royal_csv","csv_outputs",file)
-	with open(file_location, "w") as file:
+	#file_location = os.path.join("~","royal_csv","csv_outputs")
+	#os.chdir(file_location)
+	with open(file, "w") as file:
 		for record in list_csv:
 			fin_record = ""
 			field = ""

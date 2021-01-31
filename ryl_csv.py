@@ -8,13 +8,13 @@ import heapq
 raw_list = ln.unpackcsv(ln.newest())
 
 #dictionary of incorrect entries that should be replaced by value
-fix_de = {"rank 1 motherfucker":"2300","19xx":"1900"}
-fix_pr = {"master sergeant":"18", "Major":"31","1st Lietenant":"24","2nd lt":"22","Captain":"27"}
+fix_de = {"rank 1 motherfucker":2300,"19xx":1900}
+fix_pr = {"master sergeant":18, "Major":31,"1st Lietenant":24,"2nd lt":22,"Captain":27}
 fix_names = {"brutalglory #5248":"brutalglory#5248","Hosky #8249":"Hosky#8249","ImSoloDoloMan":"ImSoloDoloMan#4177","It's ok":"MRT44#8992","I am already an Extra Thicc member baby":"Doppelsolna#6261", "Purple":"Purple#8192", "A_Singh":"A_Singh#1951", "young abraham ":"abe#2475", "Genesis":"Genesis#0955", "coxinga":"coxinga#3538","Already a member":"Keaton#3947","5242":"Shaun#5242","EstiPesti 6900":"EstiPesti#6900","yES":"Hiver#6844","im dan":"boisenberry#0810", "Kyo_3z":"Kyo_3z#9606", "ggbyers #7732":"ggbyers#7732", "FrankTh3Tank95":"FrankTh3Tank95#8053","Knarloc(#8062)":"Knarloc#8062", "lcomontenegro":"lcomontenegro#2631","JaiLeD":"JaiLeD#9326"}
-fix_pr_lies = {"WickedCossack#1242":"99"}
-fix_de_lies = {"WickedCossack#1242":"3000"}
+fix_pr_lies = {"WickedCossack#1242":33}
+fix_de_lies = {"WickedCossack#1242":2300}
 fix_draft_response = {"Kyo_3z#9606":"My Dutch hero's name is \"NOOB BASHER THE SECOND\" so draft me pls"}
-
+team_captians = []
 
 '''create clean list with proper inputs'''
 clean_list = []
@@ -44,22 +44,27 @@ for player_list in raw_list:
 	pr_de_list = []
 
 	#add spaces to end so regex can pick up only 2 consecutive digits for re and 3+ for de
-	smoosh = " "+raw_re+" "+raw_de+" "
-
+	smoosh_re = " "+raw_re+" "
+	smoosh_de = " "+raw_de+" "
 	#if there is a number that would represent re or de put in a list
-	pr_re_list = re.findall(r"[^0-9][0-9][0-9][^0-9]",smoosh)
-	pr_de_list = re.findall(r"[0-9][0-9][0-9]+",smoosh)
+	pr_re_list = re.findall(r"[^0-9][0-9][0-9][^0-9]",smoosh_re)
+	pr_de_list = re.findall(r"[0-9][0-9][0-9]+",smoosh_de)
+
+	for x in range(0,len(pr_de_list)):
+		pr_de_list[x] = int(str(pr_de_list[x]).strip("[]'Rr()+/ -"))
+	for x in range(0,len(pr_re_list)):
+		pr_re_list[x] = int(str(pr_re_list[x]).strip("[]'Rr()+/ -"))
 
 	#find largest number that could represent de as de
 	if pr_de_list != []:
 			de  = (heapq.nlargest(1, pr_de_list, key=None))	
 			if int(str(de).strip("[]'Rr()+/ -"))//1000 == 0:
-				de = "0"+str(de).strip("[]'Rr()+/ -")
+				de = int("0"+str(de).strip("[]'Rr()+/ -"))
 			else:
 				de = de[0]
 	#if no number given see if input matches dictionary fix and switch otherwise output null
 	else:
-		de = "0000"
+		de = 0000
 		for key, value in fix_de.items():
 			if key == raw_de:
 				de = value
@@ -67,11 +72,11 @@ for player_list in raw_list:
 	#find largest number that could represent re as re
 	if pr_re_list != []:
 		re_ce = (heapq.nlargest(1, pr_re_list, key=None))
-		re_ce = re_ce = str(re_ce).strip("[]'Rr()+/ -")
+		re_ce = int(str(re_ce).strip("[]'Rr()+/ -"))
 
 	#if no number given see if input matches dictionary fix and switch otherwise output null
 	else:
-		re_ce = "00"
+		re_ce = 00
 		for key, value in fix_pr.items():
 			if key == raw_re:
 				re_ce = value
@@ -133,20 +138,36 @@ sort_by_re_clean = sorted(honest_list, key = lambda x: x[2])
 for record in sort_by_re_clean:
 	for raw_record in good_raw:
 		if record[1] == raw_record[3]:
-			raw_record.append(record[5])
-			sort_by_re_raw.append(raw_record)
+			sort_by_re_raw.append(raw_record+[record[5]])
+
 #sort by de rank by taking the honest list to replace 			
 sort_by_de_clean = sorted(honest_list, key = lambda x: x[3])
 for records in sort_by_de_clean:
 	for raw_records in good_raw:
 		if records[1] == raw_records[3]:
-			raw_records.append(records[6])
-			sort_by_de_raw.append(raw_records)
+			sort_by_de_raw.append(raw_records+[records[6]])
 
-print(sort_by_re_raw[71])
+#print(sort_by_re_raw)
+#print(sort_by_de_raw)
 
+'''EXPORT THEM ALL'''
+for record in range(0,len(sort_by_de_raw)):
+	if sort_by_de_raw[record][3] in team_captians:
+		del sort_by_de_raw[record]
+	raw_date,raw_akn1,raw_steam,raw_discord,raw_timezone,raw_akn2,raw_re,raw_de,raw_akn3,raw_civ,raw_statement,raw_RoyaL = sort_by_de_raw[record]
+	sort_by_de_raw[record] = [raw_discord,raw_re,raw_de]
 
+for record in range(0,len(sort_by_re_raw)):
+	if sort_by_re_raw[record][3] in team_captians:
+		del sort_by_re_raw[record] 
+	raw_date,raw_akn1,raw_steam,raw_discord,raw_timezone,raw_akn2,raw_re,raw_de,raw_akn3,raw_civ,raw_statement,raw_RoyaL = sort_by_re_raw[record]
+	sort_by_re_raw[record] = [raw_discord,raw_re,raw_de]
 
+sort_by_re_raw.reverse()
+sort_by_de_raw.reverse()
 
+ln.packcsv("de_list.csv",(sort_by_de_raw))
+ln.packcsv("re_list.csv",(sort_by_re_raw))
 
-#remove team captians from clean and raw list
+#strange noises outside my door?
+
