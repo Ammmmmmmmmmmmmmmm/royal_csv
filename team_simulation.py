@@ -6,7 +6,7 @@ import csv
 players = []
 teams = {}
 
-captains = ["WickedCossack#1242", "aykin#6177","Kaister#5974","Kaiserklein#2520","don_artie#2656","theonlybaus#5720","SirCallen#1517","wop#7118","david#6673","antz_is_here#6963","Zanerre#8833","Kyo_3z#9606","n0eL#6983","Enki_#0336","Taddy#0618","Keaton#3947"]
+captains = ["WickedCossack#1242", "aykin#6177","Kaister#5974","Kaiserklein#2520","don_artie#2656","theonlybaus#5720","sircallen#1517","wop#7118","david#6673","antz_is_here#6963","Zanerre#8833","Kyo_3z#9606","n0eL#6983","enki_#0336","Taddy#0618","Keaton#3947"]
 
 
 
@@ -18,10 +18,10 @@ by_de = True
 #========================================================================
 
 if by_de:
-	file_loc = "outputs/team_sheet_de"
+	file_loc = "outputs/team_sheet_de.txt"
 	file_used = "outputs/de_list_cleaned.csv"
 else:
-	file_loc = "outputs/team_sheet_re"
+	file_loc = "outputs/team_sheet_re.txt"
 	file_used = "outputs/re_list_cleaned.csv"
 
 with open(file_used, "r") as f:
@@ -48,16 +48,12 @@ for player in range(0,len(captains)):
 #	for num,x in enumerate(players):
 
 #broke ass shit
-print(players)
+
 for x in captains:
 	for num,y in enumerate(players):
 		if y[0] == x:
+			print(players[num])
 			del players[num]
-
-
-
-
-
 print(players)
 	
 
