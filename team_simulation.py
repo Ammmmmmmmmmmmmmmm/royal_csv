@@ -1,4 +1,4 @@
-#doesnt work in iteration 2
+#added teams
 
 import os
 import csv
